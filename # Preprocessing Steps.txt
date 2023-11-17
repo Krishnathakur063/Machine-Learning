@@ -1,0 +1,111 @@
+# EDA (Exploratory Data Analysis Steps)   
+
+    ## Preprocessing Steps
+
+        1. How big is the Data ?
+            df.shape
+
+        2. How does the data look like ?
+            df.head()
+            
+            OR
+
+            df.sample(5)
+
+        3. What is the data type of cols ?
+            df. info()
+
+        4. Are there any missing value ?
+            df.isnull().sum()
+
+        5. How does the data look mathematically ?
+            df.describe()
+
+        6. Are there duplicate values ?
+            df.duplicated().sum()
+
+        7. How is the correlation between cols ?
+            df.corr(numeric_only=True)
+
+        8. Checking correlation of Survived  Column with  other columns
+            df.corr(numeric_only=True)['Survived']
+
+    ## Univairate Analysis
+        
+        1. Categorical Data
+            a. Countplot
+                    # sns.countplot(df, x='Survived')
+                    # df['Survived'].value_counts().plot(kind='bar')
+                    
+                    sns.countplot(df, x='Pclass', hue='Pclass')
+            
+            b. Pie Chart
+                    # df['Survived'].value_counts().plot(kind='pie', label='Survied', autopct='%.2f')
+                    # df['Pclass'].value_counts().plot(kind='pie', label='Survied', autopct='%.2f')
+                    
+                    df['Sex'].value_counts().plot(kind='pie', label='Survied', autopct='%.2f')   
+
+        2. Numerical Data
+            a. Histogram
+                import matplotlib.pyplot as plt
+                # plt.hist(df['Age'])
+
+                sns.histplot(df, x='Age')
+
+            b. Distplot
+                sns.distplot(df['Age'])
+
+            c. Boxplot
+                sns.boxplot(x= df['Age'])
+
+        3. Extra method for Analysis
+            df['Age'].min()
+            df['Age'].max()
+            df['Age'].mean()
+            df['Age'].skew()
+
+    ## Bivariate and Multivariate Analysis
+        1. Scatterplot (Numerical - Numerical)
+
+            # Bivariate Analysis
+                sns.scatterplot(x=tips['total_bill'], y=tips['tip'])
+
+            # Multivariate Analysis
+                sns.scatterplot(x= tips['total_bill'], y= tips['tip'], hue= tips['sex'], style= tips['smoker'], size= tips['size'])
+
+        2. Bar Plot (Numerical - Categorical)    
+            
+            # Bivariate Analysis
+                sns.barplot(x= titanic['Pclass'], y= titanic['Age'])
+                sns.barplot(x= titanic['Pclass'], y= titanic['Fare'])
+            
+            # Multivariate Analysis
+                sns.barplot(x= titanic['Pclass'], y= titanic['Fare'], hue= titanic['Sex'])
+                sns.barplot(x= titanic['Pclass'], y= titanic['Age'], hue= titanic['Sex'])
+        
+        3. Box Plot (Numerical - Categorical)
+            
+            # Bivariate Analysis
+                sns.boxenplot(x= titanic['Sex'], y= titanic['Age'])
+            
+            # Multivariate Analysis
+                sns.boxenplot(x= titanic['Sex'], y= titanic['Age'], hue= titanic['Survived'])
+        
+        4. Distplot (Numerical - Categorical)
+            sns.distplot(x=titanic[titanic['Survived'] ==0]['Age'], hist= False)
+            sns.distplot(x=titanic[titanic['Survived'] ==1]['Age'], hist= False)
+        
+        5. HeatMap (Categorical- Categorical)
+            crosstab = pd.crosstab(titanic['Pclass'], titanic['Survived'])
+            sns.heatmap(crosstab)
+        
+        6. ClusterMap (Categorical - Categorical)
+            pd.crosstab(titanic['Parch'], titanic['Survived'])
+            sns.clustermap(pd.crosstab(titanic['Parch'], titanic['Survived']))
+        
+        7. Pairplot
+            sns.pairplot(iris, hue='species')
+        
+        8. Lineplot (Numerical - Numerical)
+            new = flights.groupby('year').sum().reset_index()
+            sns.lineplot(x=new['year'], y=new['passengers'])
